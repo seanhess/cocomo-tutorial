@@ -1,0 +1,6 @@
+Next
+ [ √ ]	List with Shared Property
+ [   ]	Creating Collection Nodes as a guest
+ [   ] 	SharedProperty with permissions - it creates its o
+ [   ] 	SharedCollection, 
+ [   ] 	Permissions with Guests and Custom User Names

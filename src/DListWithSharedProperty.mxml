@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace" creationComplete="init()" xmlns:sharedModel="com.adobe.rtc.sharedModel.*">
+
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			private var connected:Boolean = false;
+			
+			protected function init():void
+			{
+				session.login();
+				property.subscribe(); // can I do this right away?
+			}
+		]]>
+	</mx:Script>
+	
+	<sharedModel:SharedProperty id="property" 
+		sharedID="selectedIndexTest"
+		connectSession="{session}"
+		value="{list.selectedIndex}"
+	/>
+	
+	<mx:Panel width="400" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10">
+		<mx:List id="list" selectedIndex="{property.value}" width="100%" height="100%" enabled="{session.isSynchronized}">
+			<mx:dataProvider>
+				<mx:String>One</mx:String>
+				<mx:String>Two</mx:String>
+				<mx:String>Three</mx:String>
+				<mx:String>Four</mx:String>
+				<mx:String>Five</mx:String>
+			</mx:dataProvider>
+		</mx:List>
+	</mx:Panel>
+	
+	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
+	
+	<rtc:ConnectSession id="session" 
+		authenticator="{admin}"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/list" 
+	/>
+	
+	<!-- synchronizationChange="onSync(event)" -->
+	
+
+</mx:Application>
