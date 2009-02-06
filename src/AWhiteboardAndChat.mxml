@@ -9,8 +9,11 @@
 		<rtc:authenticator>
 			<rtc:AdobeHSAuthenticator userName="seanhess@gmail.com" password="cocomo"/>
 		</rtc:authenticator>
-		<rtc:SharedWhiteBoard width="100%" height="100%"/>
-		<mx:Label fontSize="24" text="Testing White Board"/>
+		
+			<rtc:SharedWhiteBoard width="100%" height="100%"/>
+			<rtc:SimpleChat right="30" top="30" width="400" height="300"/>
+			
+			<mx:Label fontSize="24" text="Testing White Board"/>
 		
 	</rtc:ConnectSessionContainer>
 </mx:Application>

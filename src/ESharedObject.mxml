@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace" creationComplete="init()" xmlns:sharedModel="com.adobe.rtc.sharedModel.*" xmlns:local="*" xmlns:model="model.*" xmlns:common="common.*">
+
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			private var connected:Boolean = false;
+			
+			protected function init():void
+			{
+				session.login();
+				property.subscribe(); // can I do this right away?
+			}
+		]]>
+	</mx:Script>
+	
+	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
+	
+	<rtc:ConnectSession id="session" 
+		authenticator="{admin}"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/share" 
+	/>
+	
+	<sharedModel:SharedProperty id="property" 
+		sharedID="sharedObject"
+		connectSession="{session}"
+	/>
+	
+	<model:PersonVO id="person" firstName="{property.value.firstName}" lastName="{property.value.lastName}" age="{property.value.age}" propertyChange="property.value = person"/>
+	
+	<mx:Panel width="400" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10">
+		<mx:Form width="100%">
+			<mx:FormItem label="First Name:">
+				<mx:TextInput id="firstName" text="{person.firstName}" change="person.firstName = firstName.text"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="First Name:">
+				<mx:TextInput id="lastName" text="{person.lastName}" change="person.lastName = lastName.text"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Age:">
+				<mx:NumericStepper id="age" value="{person.age}" change="person.age = age.value"/>
+			</mx:FormItem>
+		</mx:Form>
+	</mx:Panel>
+	
+	<common:LoadingOverlay visible="{!session.isSynchronized}"/>
+	
+</mx:Application>

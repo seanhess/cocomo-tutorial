@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace" creationComplete="init()">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace" creationComplete="init()" xmlns:common="common.*">
 
 	<mx:Script>
 		<![CDATA[
@@ -53,8 +53,8 @@
 	<mx:Panel width="400" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10">
 		<mx:TextArea id="output" width="100%" height="100%"/>
 		<mx:HBox width="100%">
-			<mx:TextInput id="input" width="100%" height="100%" enabled="{connected}" enter="sendMessage()"/>
-			<mx:Button label="Send" enabled="{connected}" click="sendMessage()"/>
+			<mx:TextInput id="input" width="100%" height="100%" enter="sendMessage()"/>
+			<mx:Button label="Send" click="sendMessage()"/>
 		</mx:HBox>
 	</mx:Panel>
 	
@@ -65,5 +65,8 @@
 		roomURL="http://connectnow.acrobat.com/seanhessnet/chat" 
 		synchronizationChange="onSync(event)"
 	/>
+	
+	<common:LoadingOverlay visible="{!session.isSynchronized}"/>
+	
 
 </mx:Application>
