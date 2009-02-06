@@ -16,7 +16,7 @@
 	
 	
 	<sharedModel:SharedProperty id="property" 
-		sharedID="selectedIndexTest"
+		sharedID="listWithSharedProperty"
 		connectSession="{session}"
 		value="{list.selectedIndex}"
 	/>
@@ -37,7 +37,7 @@
 	
 	<rtc:ConnectSession id="session" 
 		authenticator="{admin}"
-		roomURL="http://connectnow.acrobat.com/seanhessnet/list"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/tutorial"
 	/>
 	
 	<common:LoadingOverlay visible="{!session.isSynchronized}"/>

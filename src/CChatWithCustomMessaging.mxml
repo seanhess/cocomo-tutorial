@@ -22,7 +22,7 @@
 			{
 				node = new CollectionNode();
 				node.connectSession = session;
-				node.sharedID = "chatNode";
+				node.sharedID = "chatWithCustomMessaging";
 				node.subscribe();
 				node.addEventListener(CollectionNodeEvent.ITEM_RECEIVE, onItemReceive);
 				
@@ -62,7 +62,7 @@
 	
 	<rtc:ConnectSession id="session" 
 		authenticator="{admin}"
-		roomURL="http://connectnow.acrobat.com/seanhessnet/chat" 
+		roomURL="http://connectnow.acrobat.com/seanhessnet/tutorial" 
 		synchronizationChange="onSync(event)"
 	/>
 	

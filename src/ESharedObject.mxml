@@ -20,7 +20,7 @@
 	
 	<rtc:ConnectSession id="session" 
 		authenticator="{admin}"
-		roomURL="http://connectnow.acrobat.com/seanhessnet/share" 
+		roomURL="http://connectnow.acrobat.com/seanhessnet/tutorial" 
 	/>
 	
 	<sharedModel:SharedProperty id="property" 
