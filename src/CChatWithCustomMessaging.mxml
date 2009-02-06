@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace" creationComplete="init()">
+
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.rtc.sharedModel.CollectionNode;
+			import com.adobe.rtc.events.CollectionNodeEvent;
+			import com.adobe.rtc.messaging.MessageItem;
+			import com.adobe.rtc.events.SessionEvent;
+			
+			private var node:CollectionNode;
+			
+			[Bindable]
+			private var connected:Boolean = false;
+			
+			protected function init():void
+			{
+				session.login();
+			}
+			
+			protected function onSync(event:SessionEvent):void
+			{
+				node = new CollectionNode();
+				node.connectSession = session;
+				node.sharedID = "chatNode";
+				node.subscribe();
+				node.addEventListener(CollectionNodeEvent.ITEM_RECEIVE, onItemReceive);
+				
+				connected = true;
+			}
+			
+			protected function onItemReceive(event:CollectionNodeEvent):void
+			{
+				if (event.item)
+					output.htmlText += "<b>" + event.item.body.name + ": </b>" + event.item.body.message + "<br />";
+			}
+			
+			protected function sendMessage():void
+			{
+				var displayName:String = session.userManager.getUserDescriptor(session.userManager.myUserID).displayName;
+				var body:String = input.text;
+				
+				var message:MessageItem = new MessageItem("chatNode");
+					message.body = {name:displayName, message:body};
+				
+				node.publishItem(message);
+				
+				input.text = "";
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Panel width="400" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10">
+		<mx:TextArea id="output" width="100%" height="100%"/>
+		<mx:HBox width="100%">
+			<mx:TextInput id="input" width="100%" height="100%" enabled="{connected}" enter="sendMessage()"/>
+			<mx:Button label="Send" enabled="{connected}" click="sendMessage()"/>
+		</mx:HBox>
+	</mx:Panel>
+	
+	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
+	
+	<rtc:ConnectSession id="session" 
+		authenticator="{admin}"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/chat" 
+		synchronizationChange="onSync(event)"
+	/>
+
+</mx:Application>
