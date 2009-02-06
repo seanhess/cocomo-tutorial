@@ -9,12 +9,13 @@
 			protected function init():void
 			{
 				session.login();
-				property.subscribe();
+				node.subscribe();
+				firstNameProperty.subscribe();
+				lastNameProperty.subscribe();
+				ageProperty.subscribe();
 			}
 		]]>
 	</mx:Script>
-	
-	<!-- In this example, we pass the whole PersonVO around every time a change is made -->
 	
 	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
 	
@@ -23,14 +24,27 @@
 		roomURL="http://connectnow.acrobat.com/seanhessnet/share" 
 	/>
 	
-	<sharedModel:SharedProperty id="property" 
-		sharedID="sharedObject"
-		connectSession="{session}"
+	<sharedModel:CollectionNode id="node" connectSession="{session}" sharedID="sharedObjectByProperty"/>
+	
+	<sharedModel:SharedProperty id="firstNameProperty" 
+		collectionNode="{node}"
+		nodeName="firstName"
+		value="{person.firstName}"
 	/>
 	
+	<sharedModel:SharedProperty id="lastNameProperty" 
+		collectionNode="{node}"
+		nodeName="lastName"
+		value="{person.lastName}"
+	/>
 	
-	<!-- Note that I manually set the property's value. Binding the value to the person didn't work -->
-	<model:PersonVO id="person" firstName="{property.value.firstName}" lastName="{property.value.lastName}" age="{property.value.age}" propertyChange="property.value = person"/>
+	<sharedModel:SharedProperty id="ageProperty" 
+		collectionNode="{node}"
+		nodeName="age"
+		value="{person.age}"
+	/>
+	
+	<model:PersonVO id="person" firstName="{firstNameProperty.value}" lastName="{lastNameProperty.value}" age="{ageProperty.value}"/>
 	
 	<mx:Panel width="400" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10">
 		<mx:Form width="100%">

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace" creationComplete="init()" xmlns:sharedModel="com.adobe.rtc.sharedModel.*" xmlns:local="*" xmlns:model="model.*" xmlns:common="common.*">
+
+	<mx:Script>
+		<![CDATA[
+			import model.PersonVO;
+			[Bindable]
+			private var connected:Boolean = false;
+			
+			protected function init():void
+			{
+				session.login();
+				node.subscribe();
+				collection.subscribe();
+			}
+			
+			protected function addPerson():void
+			{
+				var newPerson:PersonVO = new PersonVO();
+					newPerson.age = age.value;
+					newPerson.firstName = firstName.text;
+					newPerson.lastName = lastName.text;
+					
+				collection.addItem(newPerson);
+			}
+			
+			protected function editPerson():void
+			{
+				var person:PersonVO = list.selectedItem as PersonVO;
+					person.age = age.value;
+					person.firstName = firstName.text;
+					person.lastName = lastName.text;
+					
+				collection.setItemAt(person, list.selectedIndex);
+			}
+		]]>
+	</mx:Script>
+	
+	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
+	
+	<rtc:ConnectSession id="session" 
+		authenticator="{admin}"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/share" 
+	/>
+	
+	<sharedModel:CollectionNode id="node" connectSession="{session}" sharedID="sharedCollection"/>
+	
+	<sharedModel:SharedCollection id="collection"
+		collectionNode="{node}"
+		nodeName="collection"
+		idField="uid"
+		itemClass="{PersonVO}"
+		/>
+		
+	<mx:Panel width="800" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10" layout="horizontal">
+		<mx:List id="list" width="100%" height="100%" dataProvider="{collection}">
+			
+		</mx:List>
+		<mx:Form width="100%">
+			<mx:FormItem label="First Name:">
+				<mx:TextInput id="firstName" text="{list.selectedItem.firstName}"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Last Name:">
+				<mx:TextInput id="lastName" text="{list.selectedItem.lastName}"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Age:">
+				<mx:NumericStepper id="age" value="{list.selectedItem.age}"/>
+			</mx:FormItem>
+			
+			<mx:HBox>
+				<mx:Button label="Add Person" click="addPerson()"/> 
+				<mx:Button label="Edit Person" click="editPerson()"/> 
+			</mx:HBox>
+		</mx:Form>
+	</mx:Panel>
+	
+	<common:LoadingOverlay visible="{!collection.isSynchronized}"/>
+	
+</mx:Application>

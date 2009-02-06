@@ -4,3 +4,14 @@ Next
  [   ] 	SharedProperty with permissions - it creates its o
  [   ] 	SharedCollection, 
  [   ] 	Permissions with Guests and Custom User Names
+ 
+ 
+ 
+Do one on Resources, like the Dev Console and the local server
+Put everything in the same room
+
+Figure out some other authentication method that doesn't involve handing out my password
+	Learn what the Shared Secret is!
+	
+
+

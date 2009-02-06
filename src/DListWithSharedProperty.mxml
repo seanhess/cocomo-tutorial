@@ -9,7 +9,7 @@
 			protected function init():void
 			{
 				session.login();
-				property.subscribe(); // can I do this right away?
+				property.subscribe();
 			}
 		]]>
 	</mx:Script>
