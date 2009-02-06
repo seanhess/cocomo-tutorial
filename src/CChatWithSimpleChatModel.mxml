@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace">
+
+	<!-- http://giantflyingsaucer.com/blog/?p=289 -->
+	
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.rtc.pods.simpleChatClasses.ChatMessageDescriptor;
+			import com.adobe.rtc.events.ChatEvent;
+			import com.adobe.rtc.pods.simpleChatClasses.SimpleChatModel;
+			
+			[Bindable] public var model:SimpleChatModel;
+			
+			public function connect():void
+			{
+				model = new SimpleChatModel(true);
+				model.sharedID = "simpleChatModel";
+				model.subscribe();
+				model.addEventListener(ChatEvent.HISTORY_CHANGE, onMessage);
+				connect_btn.enabled = false;
+				roster_lst.dataProvider = session.userManager.userCollection;
+			}
+			
+			private function onMessage(event:ChatEvent):void
+			{
+				if ( event.message && event.message.displayName && event.message.msg )
+					chatOutput_txt.htmlText += "<b>" + event.message.displayName + ":</b> " + event.message.msg + "<br />";
+			}
+			
+			private function sendMessage():void
+			{
+				var chatMessageDescriptor:ChatMessageDescriptor = new ChatMessageDescriptor();
+			        chatMessageDescriptor.displayName = session.userManager.getUserDescriptor(session.userManager.myUserID).displayName;
+			        chatMessageDescriptor.msg =  chatInput_txt.text;
+			        
+			    model.sendMessage(chatMessageDescriptor);
+			    chatInput_txt.text = "";
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
+
+	<rtc:ConnectSessionContainer 
+		roomURL="http://connectnow.acrobat.com/seanhessnet/chat" 
+		width="100%" height="100%"
+		authenticator="{admin}"
+		id="session"
+		>
+	
+		<mx:Panel width="450" height="307" layout="absolute" horizontalCenter="0" verticalCenter="0" title="Cocomo Chat" id="cocomoChat_pnl" fontSize="14" fontFamily="Verdana" color="#000000">       
+	        <mx:TextInput x="10" y="223" borderStyle="solid" maxChars="100" id="chatInput_txt" width="237" height="29" enter="sendMessage()"/>
+	        <mx:TextArea x="10" y="14" width="237" height="201" id="chatOutput_txt" editable="false" color="#000000"/>
+	        <mx:List x="257" y="14" id="roster_lst" height="201" width="163" labelField="displayName"></mx:List>
+	        <mx:Button x="255" y="223" label="Connect" height="29" id="connect_btn" width="165" click="connect()"/>
+   		</mx:Panel>
+		
+	</rtc:ConnectSessionContainer>
+	
+</mx:Application>
