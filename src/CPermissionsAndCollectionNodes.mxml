@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" xmlns:rtc="CocomoNameSpace" xmlns:common="common.*"
+	xmlns:sharedModel="com.adobe.rtc.sharedModel.*"
+	currentState="{LOGIN}"
+	>
+
+	<mx:states>
+		<mx:State name="{LOGIN}"/>
+		<mx:State name="{SYNCHRONIZING}"/>
+		<mx:State name="{ACTIVE}"/>
+	</mx:states>
+
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.rtc.sharedModel.CollectionNode;
+			import com.adobe.rtc.events.CollectionNodeEvent;
+			import com.adobe.rtc.messaging.MessageItem;
+			import com.adobe.rtc.events.SessionEvent;
+			
+			// Application States // 
+			public static const LOGIN:String = "login";
+			public static const SYNCHRONIZING:String = "sync";
+			public static const ACTIVE:String = "active";
+			
+			protected function onLogin():void
+			{
+				currentState = SYNCHRONIZING;
+				session.login();
+			}
+			
+			protected function onSync(event:SessionEvent):void
+			{
+				node.subscribe();
+			}
+			
+			protected function onNodeSync():void
+			{
+				currentState = ACTIVE;
+
+				// Create the sub node if it isn't defined // 
+				if (!node.isNodeDefined("subNode"))
+					node.createNode("subNode");
+			}
+			
+			protected function update():void
+			{
+				node.publishItem(new MessageItem("subNode", "Last set by " + session.authenticator.userName));
+			}
+			
+			protected function onItemReceive(event:CollectionNodeEvent):void
+			{
+				if (event.item)
+					display.text= event.item.body;
+			}
+		]]>
+	</mx:Script>
+	
+	<!-- 1. Download and Launch the Dev Console -->
+	<!-- 2. Add a profile, log in, and Enter your room -->
+	<!-- 3. Select the "Explore" tab -->
+	<!-- 4. Add a new collection node named "permissionsExample" -->
+	<!-- 5. Add a node to permissionsExample named "subNode" -->
+	<!-- 6. Either change the Publish Model of subNode to viewer, or go back to the room and select auto promote users -->
+	
+	<!-- OR, just change room to auto promote, and run it once as an admin -->
+	
+	<sharedModel:CollectionNode id="node" 
+		connectSession="{session}" 
+		sharedID="permissionsExample" 
+		synchronizationChange="onNodeSync()"
+		itemReceive="onItemReceive(event)"
+	/>
+	
+	<!-- Notice I'm using the username the user selects, and no password. This will set us up as a VIEWER -->
+	<rtc:AdobeHSAuthenticator id="guest" userName="{login.username}"/>
+	
+	<rtc:ConnectSession id="session" 
+		authenticator="{guest}"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/tutorial" 
+		synchronizationChange="onSync(event)"
+	/>
+	
+	<mx:Panel width="400" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10">
+		<mx:Label id="display" fontSize="24" fontWeight="bold"/> 
+		<mx:Button label="Update Value" click="update()"/>
+	</mx:Panel>
+	
+	<!-- Overlays for login and sync -->
+	<common:LoadingOverlay visible="{currentState == SYNCHRONIZING}"/>
+	<common:LoginOverlay id="login" visible="{currentState == LOGIN}" login="onLogin()"/>
+
+</mx:Application>

@@ -6,6 +6,8 @@ Next
  [   ] 	Permissions with Guests and Custom User Names
  
  
+ HTTP / REST / Authentication Integration???
+ 
  
 Do one on Resources, like the Dev Console and the local server
 Put everything in the same room

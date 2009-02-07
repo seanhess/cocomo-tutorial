@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" backgroundAlpha="0.8" backgroundColor="#000000">
+
+	<mx:Metadata>
+		[Event("login")]
+	</mx:Metadata>
+
+	<mx:String id="username">{input.text}</mx:String>
+
+	<mx:Panel layout="horizontal" verticalCenter="0" horizontalCenter="0" paddingTop="10" paddingBottom="10" paddingRight="10" paddingLeft="10">
+		<mx:TextInput id="input" fontSize="18" width="300" text="Guest"/>
+		<mx:Button fontSize="18" label="Login" click="dispatchEvent(new Event('login'))"/>
+	</mx:Panel>
+	
+</mx:Canvas>

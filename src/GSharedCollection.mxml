@@ -33,6 +33,12 @@
 					
 				collection.setItemAt(person, list.selectedIndex);
 			}
+			
+			protected function deletePerson():void
+			{
+				if (list.selectedIndex > -1)
+					collection.removeItemAt(list.selectedIndex);
+			}
 		]]>
 	</mx:Script>
 	
@@ -70,8 +76,9 @@
 			</mx:FormItem>
 			
 			<mx:HBox>
-				<mx:Button label="Add Person" click="addPerson()"/> 
-				<mx:Button label="Edit Person" click="editPerson()"/> 
+				<mx:Button label="Add" click="addPerson()"/> 
+				<mx:Button label="Update" click="editPerson()"/> 
+				<mx:Button label="Delete" click="deletePerson()"/> 
 			</mx:HBox>
 		</mx:Form>
 	</mx:Panel>

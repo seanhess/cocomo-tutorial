@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace" creationComplete="init()" xmlns:common="common.*" xmlns:sharedModel="com.adobe.rtc.sharedModel.*">
+
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.rtc.sharedModel.CollectionNode;
+			import com.adobe.rtc.events.CollectionNodeEvent;
+			import com.adobe.rtc.messaging.MessageItem;
+			import com.adobe.rtc.events.SessionEvent;
+			
+			[Bindable]
+			private var connected:Boolean = false;
+			
+			protected function init():void
+			{
+				session.login();
+			}
+			
+			// connect to the node // 
+			protected function onSync(event:SessionEvent):void
+			{
+				node.subscribe();
+				connected = true;
+			}
+			
+			// when someone else chats // 
+			protected function onItemReceive(event:CollectionNodeEvent):void
+			{
+				if (event.item)
+					output.htmlText += "<b>" + event.item.body.name + ": </b>" + event.item.body.message + "<br />";
+			}
+			
+			// When we chat // 
+			protected function sendMessage():void
+			{
+				var displayName:String = session.userManager.getUserDescriptor(session.userManager.myUserID).displayName; // this will be the same for everybody, except with a "2" or "3" on the end
+				var body:String = input.text;
+				
+				var message:MessageItem = new MessageItem("chatNode");	
+					message.body = {name:displayName, message:body}; 	// we're sending our own little untyped object over the wire
+				
+				node.publishItem(message);
+				
+				input.text = "";
+			}
+		]]>
+	</mx:Script>
+	
+	<!-- Cocomo Stuff -->
+	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
+	
+	<rtc:ConnectSession id="session" 
+		authenticator="{admin}"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/tutorial" 
+		synchronizationChange="onSync(event)"
+	/>
+	
+	<sharedModel:CollectionNode id="node"
+		connectSession="{session}" 
+		sharedID="chatWithCustomMessaging"
+		itemReceive="onItemReceive(event)"
+	/>
+	
+	<!-- Display -->
+	<mx:Panel width="400" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10">
+		<mx:TextArea id="output" width="100%" height="100%"/>
+		<mx:HBox width="100%">
+			<mx:TextInput id="input" width="100%" height="100%" enter="sendMessage()"/>
+			<mx:Button label="Send" click="sendMessage()"/>
+		</mx:HBox>
+	</mx:Panel>
+	
+	<!-- Progress Bar: Prevents interaction until we're synched -->
+	<common:LoadingOverlay visible="{!session.isSynchronized}"/>
+	
+
+</mx:Application>
