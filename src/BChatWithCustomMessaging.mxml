@@ -8,9 +8,6 @@
 			import com.adobe.rtc.messaging.MessageItem;
 			import com.adobe.rtc.events.SessionEvent;
 			
-			[Bindable]
-			private var connected:Boolean = false;
-			
 			protected function init():void
 			{
 				session.login();
@@ -20,7 +17,6 @@
 			protected function onSync(event:SessionEvent):void
 			{
 				node.subscribe();
-				connected = true;
 			}
 			
 			// when someone else chats // 

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="CocomoNameSpace" creationComplete="init()" xmlns:sharedModel="com.adobe.rtc.sharedModel.*" xmlns:common="common.*" xmlns:model="model.*">
+
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			private var connected:Boolean = false;
+			
+			protected function init():void
+			{
+				session.login();
+				node.subscribe();
+				ageProperty.subscribe();
+				firstNameProperty.subscribe();
+				lastNameProperty.subscribe();
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Binding source="person.firstName" destination="firstNameProperty.value"/>
+	<mx:Binding source="firstNameProperty.value" destination="person.firstName"/>
+	
+	<mx:Binding source="person.lastName" destination="lastNameProperty.value"/>
+	<mx:Binding source="lastNameProperty.value" destination="person.lastName"/>
+	
+	<mx:Binding source="person.age" destination="ageProperty.value"/>
+	<mx:Binding source="ageProperty.value" destination="person.age"/>
+		
+	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
+	
+	<rtc:ConnectSession id="session" 
+		authenticator="{admin}"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/tutorial"
+	/>
+	
+	<sharedModel:CollectionNode id="node"
+		connectSession="{session}"
+		sharedID="externalSharedObject"
+	/>
+
+	<sharedModel:SharedProperty id="firstNameProperty" 
+		collectionNode="{node}"
+		nodeName="firstName"
+	/>
+	
+	<sharedModel:SharedProperty id="lastNameProperty" 
+		collectionNode="{node}"
+		nodeName="lastName"
+	/>
+	
+	<sharedModel:SharedProperty id="ageProperty" 
+		collectionNode="{node}"
+		nodeName="age"
+	/>
+	
+	<model:PersonVO id="person" firstName="Henry" lastName="Johns" age="34"/>
+		
+	<mx:Panel width="400" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10">
+		<mx:TextInput id="firstName" text="{person.firstName}" change="person.firstName = firstName.text"/>
+		<mx:TextInput id="lastName" text="{person.lastName}" change="person.lastName = lastName.text"/>
+		<mx:TextInput id="age" text="{person.age}" change="person.age = new Number(age.text)"/>
+	</mx:Panel>
+	
+	
+	<common:LoadingOverlay visible="{!session.isSynchronized}"/>
+	
+
+</mx:Application>
