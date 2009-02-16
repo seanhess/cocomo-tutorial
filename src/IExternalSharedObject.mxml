@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="AfcsNameSpace" creationComplete="init()" xmlns:sharedModel="com.adobe.rtc.sharedModel.*" xmlns:local="*" xmlns:model="model.*" xmlns:common="common.*" xmlns:sharing="sharing.*">
+
+	<mx:Script>
+		<![CDATA[
+			import model.PersonVO;
+			[Bindable]
+			private var connected:Boolean = false;
+			
+			protected function init():void
+			{
+				session.login();
+				node.subscribe();
+				share.subscribe();
+			}
+		]]>
+	</mx:Script>
+	
+	<rtc:AdobeHSAuthenticator id="admin" userName="seanhess@gmail.com" password="cocomo"/>
+	
+	<rtc:ConnectSession id="session" 
+		authenticator="{admin}"
+		roomURL="http://connectnow.acrobat.com/seanhessnet/tutorial" 
+	/>
+	
+	<!-- This nullifies me! -->
+	<mx:Binding source="share.value" destination="person"/>
+	
+	<sharedModel:CollectionNode id="node" connectSession="{session}" sharedID="externalSharedCollection"/>
+	
+	<sharing:ModelShare id="share" collectionNode="{node}" fields="{{firstName:true, lastName:true, age:true}}" model="{person}" modelID="hi" type="{PersonVO}"/>
+
+	<model:PersonVO id="bob" firstName="Bob" lastName="Farley" age="22" relation="{jill}"/>
+	<model:PersonVO id="jill" firstName="Jill" lastName="McNill" age="22"/>
+	
+	<model:PersonVO id="person" firstName="MR" lastName="PERSON" age="11"/>
+	
+	<mx:Panel width="800" height="300" verticalCenter="0" horizontalCenter="0" paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10" layout="horizontal">
+		<mx:Form width="100%">
+			<mx:FormItem label="First Name:">
+				<mx:TextInput id="firstName" text="{person.firstName}" change="person.firstName = firstName.text"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Last Name:">
+				<mx:TextInput id="lastName" text="{person.lastName}" change="person.lastName = lastName.text"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="Age:">
+				<mx:NumericStepper id="age" value="{person.age}" change="person.age = age.value"/>
+			</mx:FormItem>
+		</mx:Form>
+	</mx:Panel>
+	
+	<common:LoadingOverlay visible="{!session.isSynchronized}"/>
+	
+</mx:Application>

@@ -8,6 +8,7 @@ package model
 		public var firstName:String;
 		public var lastName:String;
 		public var age:Number;
+		public var relation:PersonVO;
 		
 		public function toString():String
 		{

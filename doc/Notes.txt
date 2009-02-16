@@ -17,3 +17,8 @@ Figure out some other authentication method that doesn't involve handing out my 
 	
 
 
+BEST WAY TO DO EXTERNAL
+	Simple objects can be stored and updated all together. Complex relationships need to be separate. 
+	
+Some external class that sets up a SharedProperty for your object. You specify which fields. 
+

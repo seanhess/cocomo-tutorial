@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:rtc="AfcsNameSpace">
+	<rtc:ConnectSessionContainer roomURL="http://connectnow.acrobat.com/seanhessnet/tutorial">
+		<rtc:authenticator>
+			<rtc:AdobeHSAuthenticator userName="seanhess@gmail.com" password="cocomo"/>
+		</rtc:authenticator>
+		
+		<rtc:SharedWhiteBoard/>
+	</rtc:ConnectSessionContainer>
+</mx:Application>

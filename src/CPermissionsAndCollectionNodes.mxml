@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" xmlns:rtc="CocomoNameSpace" xmlns:common="common.*"
+	layout="absolute" xmlns:rtc="AfcsNameSpace" xmlns:common="common.*"
 	xmlns:sharedModel="com.adobe.rtc.sharedModel.*"
 	currentState="{LOGIN}"
 	>
@@ -40,13 +40,13 @@
 				currentState = ACTIVE;
 
 				// Create the sub node if it isn't defined // 
-				if (!node.isNodeDefined("subNode"))
-					node.createNode("subNode");
+				if (!node.isNodeDefined("theNodeName"))
+					node.createNode("theNodeName");
 			}
 			
 			protected function update():void
 			{
-				node.publishItem(new MessageItem("subNode", "Last set by " + session.authenticator.userName));
+				node.publishItem(new MessageItem("theNodeName", "Last set by " + session.authenticator.userName, "theItemID"));
 			}
 			
 			protected function onItemReceive(event:CollectionNodeEvent):void
@@ -61,7 +61,7 @@
 	<!-- 2. Add a profile, log in, and Enter your room -->
 	<!-- 3. Select the "Explore" tab -->
 	<!-- 4. Add a new collection node named "permissionsExample" -->
-	<!-- 5. Add a node to permissionsExample named "subNode" -->
+	<!-- 5. Add a node to permissionsExample named "theNodeName" -->
 	<!-- 6. Either change the Publish Model of subNode to viewer, or go back to the room and select auto promote users -->
 	
 	<!-- OR, just change room to auto promote, and run it once as an admin -->
